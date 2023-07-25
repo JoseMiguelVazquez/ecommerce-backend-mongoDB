@@ -26,11 +26,11 @@ const createProduct = asyncHandler(async (req, res) => {
 
 const getProduct = asyncHandler(async (req, res) => {
     const product = await Product.findById(req.params.id)
+    // const product = await Product.find({ _id: req.params.id })
     if(!product){
         res.status(400)
         throw new Error("Product doesn't exists")
     }
-    // const product = await Product.find({ _id: req.params.id })
     res.status(200).json(product)
 })
 
