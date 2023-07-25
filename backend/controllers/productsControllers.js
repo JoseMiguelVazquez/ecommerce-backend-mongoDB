@@ -18,7 +18,7 @@ const createProduct = asyncHandler(async (req, res) => {
 
     if(!title || !description || !price || !category) {
         res.status(400)
-        throw new Error('Por favor completa la informacion del producto')
+        throw new Error('Please complete product information')
     }
 
     const newProduct = await Product.create({
@@ -32,6 +32,11 @@ const createProduct = asyncHandler(async (req, res) => {
 })
 
 const updateProduct = asyncHandler(async (req, res) => {
+    const productToUpdate = await Product.findById(req.params.id)
+    if(!productToUpdate){
+        res.status(400)
+        throw new Error("Product doesn't exists")
+    }
     res.status(200).json({ message: `Update Product with id: ${req.params.id}`})
 })
 

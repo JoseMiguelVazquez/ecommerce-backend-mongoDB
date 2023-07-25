@@ -3,21 +3,21 @@ const mongoose = require('mongoose')
 const productSchema = mongoose.Schema({
     title: {
         type: String,
-        required: [true, 'Introduce un titulo de producto'],
+        required: [true, 'Product must have a unique title'],
         unique: true
     },
     description: {
         type: String,
-        required: [true, 'Introduce una descripcion del producto']
+        required: [true, 'Product must have a description']
     },
     price: {
         type: Number,
-        required: [true, 'Introduce un precio al producto'],
-        min: [0, 'No puede haber precios negativos']
+        required: [true, 'Product must have a price'],
+        min: [0, "There can't be negative prices"]
     },
     category: {
         type: String,
-        required: [true, 'Introduce una categoria del producto']
+        required: [true, 'Product must have a category']
     },
     image: {
         type: String
