@@ -8,7 +8,8 @@ const getAllProducts = asyncHandler(async (req, res) => {
 })
 
 const getProduct = asyncHandler(async (req, res) => {
-    const product = await Product.find({ id: req.params.id })
+    const product = await Product.findById(req.params.id)
+    // const product = await Product.find({ _id: req.params.id })
     res.status(200).json(product)
 })
 
