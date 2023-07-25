@@ -1,20 +1,33 @@
 const asyncHandler = require('express-async-handler')
+const Product = require('../models/productsModel')
 
 
 const getAllProducts = asyncHandler(async (req, res) => {
-    res.status(200).json({ message: 'Get All Products'})
+    const products = await Product.find()
+    res.status(200).json(products)
 })
 
 const getProduct = asyncHandler(async (req, res) => {
-    res.status(200).json({ message: `Get Product with id: ${req.params.id}`})
+    const product = await Product.find({ id: req.params.id })
+    res.status(200).json(product)
 })
 
 const createProduct = asyncHandler(async (req, res) => {
-    if(!req.body.title || !req.body.description || !req.body.price || !req.body.category) {
+    const {title, description, price, category, image} = req.body
+
+    if(!title || !description || !price || !category) {
         res.status(400)
         throw new Error('Por favor completa la informacion del producto')
     }
-    res.status(201).json({ message: 'Create Product'})
+
+    const newProduct = await Product.create({
+        title,
+        description,
+        price,
+        category,
+        image
+    })
+    res.status(201).json(newProduct)
 })
 
 const updateProduct = asyncHandler(async (req, res) => {
