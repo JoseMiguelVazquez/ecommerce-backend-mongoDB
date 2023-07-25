@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const productSchema = require('../models/productsModel')
 
 const orderSchema = mongoose.Schema({
     userId: {
@@ -10,7 +11,7 @@ const orderSchema = mongoose.Schema({
         type: Date
     },
     products: {
-        type: [Product]
+        type: [productSchema]
     }
 },{
     timestamps: true
