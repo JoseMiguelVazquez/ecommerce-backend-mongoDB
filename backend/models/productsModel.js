@@ -3,8 +3,7 @@ const mongoose = require('mongoose')
 const productSchema = mongoose.Schema({
     title: {
         type: String,
-        required: [true, 'Product must have a unique title'],
-        unique: true
+        required: [true, 'Product must have a title']
     },
     description: {
         type: String,
@@ -26,5 +25,12 @@ const productSchema = mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model('Product', productSchema)
-module.exports = productSchema
+const Product = mongoose.model('Product', productSchema)
+
+module.exports = {
+    Product,
+    productSchema
+}
+
+// module.exports = mongoose.model('Product', productSchema)
+// module.exports = productSchema

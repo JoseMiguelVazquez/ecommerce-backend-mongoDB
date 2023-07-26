@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler')
 const Order = require('../models/ordersModel')
 
 const getAllOrders = asyncHandler(async (req, res) => {
-    const orders = await Order.find()
+    const orders = await Order.find({userId: req.user._id})
     res.status(200).json(orders)
 })
 
@@ -17,6 +17,7 @@ const createOrder = asyncHandler(async (req, res) => {
     }
 
     const newOrder = await Order.create({
+        userId: req.user._id,
         date: req.body.date,
         products: req.body.products
     })
@@ -29,7 +30,12 @@ const getOrder = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Order doesn't exists")
     }
-    res.status(200).json(order)
+    if(order.userId.toString() !== req.user._id.toString()) {
+        res.status(401)
+        throw new Error('Unauthorized Access')
+    } else {
+        res.status(200).json(order)
+    }
 })
 
 const updateOrder = asyncHandler(async (req, res) => {
@@ -38,8 +44,13 @@ const updateOrder = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Order doesn't exists")
     }
-    const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    res.status(200).json(updatedOrder)
+    if(orderToUpdate.userId.toString() !== req.user._id.toString()) {
+        res.status(401)
+        throw new Error('Unauthorized Access')
+    } else {
+        const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        res.status(200).json(updatedOrder)
+    }
 })
 
 const deleteOrder = asyncHandler(async (req, res) => {
@@ -48,8 +59,13 @@ const deleteOrder = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Order doesn't exists")
     }
-    await orderToDelete.deleteOne()
-    res.status(200).json({ id: req.params.id})
+    if(orderToDelete.userId.toString() !== req.user._id.toString()) {
+        res.status(401)
+        throw new Error('Unauthorized Access')
+    } else {
+        await orderToDelete.deleteOne()
+        res.status(200).json({ id: req.params.id})
+    }
 })
 
 
