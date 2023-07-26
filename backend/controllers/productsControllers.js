@@ -14,14 +14,19 @@ const createProduct = asyncHandler(async (req, res) => {
         throw new Error('Please complete product information')
     }
 
-    const newProduct = await Product.create({
-        title,
-        description,
-        price,
-        category,
-        image
-    })
-    res.status(201).json(newProduct)
+    if(req.user.role === 'ADMIN'){
+        const newProduct = await Product.create({
+            title,
+            description,
+            price,
+            category,
+            image
+        })
+        res.status(201).json(newProduct)
+    } else {
+        res.status(401)
+        throw new Error('Unauthorized Access')
+    }
 })
 
 const getProduct = asyncHandler(async (req, res) => {
@@ -40,8 +45,13 @@ const updateProduct = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Product doesn't exists")
     }
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    res.status(200).json(updatedProduct)
+    if(req.user.role === 'ADMIN'){
+        const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        res.status(200).json(updatedProduct)
+    } else {
+        res.status(401)
+        throw new Error('Unauthorized Access')
+    }
 })
 
 const deleteProduct = asyncHandler(async (req, res) => {
@@ -50,8 +60,13 @@ const deleteProduct = asyncHandler(async (req, res) => {
         res.status(400)
         throw new Error("Product doesn't exists")
     }
-    await productToDelete.deleteOne()
-    res.status(200).json({ id: req.params.id})
+    if(req.user.role === 'ADMIN'){
+        await productToDelete.deleteOne()
+        res.status(200).json({ id: req.params.id})
+    } else {
+        res.status(401)
+        throw new Error('Unauthorized Access')
+    }
 })
 
 
