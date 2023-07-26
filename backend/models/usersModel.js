@@ -13,6 +13,10 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: [true, 'User must have a password']
+    },
+    role: {
+        type: String,
+        default: 'CUSTOMER' // CUSTOMER OR ADMIN
     }
 },{
     timestamps: true
